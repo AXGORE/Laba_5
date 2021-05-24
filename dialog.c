@@ -3,6 +3,7 @@
 #include"dialog.h"
 #include"Graph.h"
 #include<string.h>
+#include "time.h"
 
 
 
@@ -25,47 +26,47 @@ void Get_int(int* a) {
 }
 
 int dialog(int* x, int* y, int* num) {
-	char* options[] = { "1.Add Ver","2.Add Edge","3.Delete Edge", "4.Delete Ver","5.Find ver","6.Show tree","7.Exit" };
+	char* options[] = { "1.Add Ver","2.Add Edge","3.Delete Edge", "4.Delete Ver","5.Find ver","6.Show tree","7.Find min way","8.Find 3 vin ways","9.Exit","10. Create random graph","11. Timing_DFS","12. BF_Timing" };
 	int flag, vsp, n;
 	printf("Choose one option:\n");
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 12; i++) {
 		printf("%s\n", options[i]);
 	}
 	do {
 		Get_int(&vsp);
-		if (vsp > 7) { printf("%s\n", "Error, try again "); }
-	} while (vsp > 7);
-	if (vsp == -1) { return 7; }
+		if (vsp > 12) { printf("%s\n", "Error, try again "); }
+	} while (vsp > 12);
+	if (vsp == -1) { return 9; }
 	printf("\n");
 	if (vsp == 1) {
 		printf("Enter num -->\n");
 	    Get_int(num);
-		if (*num == -1) { return 7; }
+		if (*num == -1) { return 9; }
 		printf("Enter x -->\n");
 		flag = Get_key(x);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		printf("Enter y -->\n");
 		flag = Get_key(y);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		return 1;
 	}
 	if (vsp == 2) {
 		printf("Enter from -->\n");
 		flag = Get_key(x);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		printf("Enter to -->\n");
 		flag = Get_key(y);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		return 2;
 	}
 	if (vsp == 3) {
 
 		printf("Enter from -->\n");
 		flag = Get_key(x);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		printf("Enter to -->\n");
 		flag = Get_key(y);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		return 3;
 	}
 
@@ -73,24 +74,48 @@ int dialog(int* x, int* y, int* num) {
 		printf("Enter num -->\n");
 		while (getchar() != '\n');
 		flag = Get_key(num);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		return 4;
 	}
 	if (vsp == 5) {
 		printf("Enter from -->\n");
 		flag = Get_key(x);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		printf("Enter to -->\n");
 		flag = Get_key(y);
-		if (flag == -1) { return 7; }
+		if (flag == -1) { return 9; }
 		return 5;
 	}
 	if (vsp == 6) {
 		return 6;
 	}
 	if (vsp == 7) {
+		printf("Enter from -->\n");
+		flag = Get_key(x);
+		if (flag == -1) { return 9; }
+		printf("Enter to -->\n");
+		flag = Get_key(y);
+		if (flag == -1) { return 9; }
 		return 7;
 	}
+	if (vsp == 8) {
+		printf("Enter from -->\n");
+		flag = Get_key(x);
+		if (flag == -1) { return 9; }
+		printf("Enter to -->\n");
+		flag = Get_key(y);
+		if (flag == -1) { return 9; }
+		return 8;
+	}
+	if (vsp == 9) { return 9; }
+	if (vsp == 10) {
+		printf("Enter number of elements -->\n");
+		flag = Get_key(x);
+		if (flag == -1) { return 9; }
+		return 10;
+	}
+	if (vsp == 11) { return 11; }
+	if (vsp == 12) { return 12; }
 }
 void Error() {
 	printf("\nCan't add vertex with rhis name\n");
@@ -152,3 +177,93 @@ void show_ver(Find* a) {
 		help = help->next;
 	}
 }
+
+void show_way_v(Ver* a) {
+	if (a->prev != NULL) {
+		show_way_v(a->prev);
+	}
+	printf("%d --> ", a->num);
+}
+
+void show_ver_v(Ver* a) {
+	Ed* help;
+	printf("\nnum: %d \n X --> %d Y --> %d\n", a->num, a->x, a->y);
+	help = a->edges;
+	printf("Edges:\n");
+	while (help != NULL) {
+		printf("%d ---> %d\n", help->fr->num, help->to->num);
+		help = help->next;
+	}
+}
+
+int showmatr(MD** matr,int fr, int to) {
+	if (matr[fr][to].next == -1) {
+		return -1;
+	}
+	int c=matr[fr][to].num_fr;
+	int b=fr;
+	printf("\n");
+	while(b!=to) {
+		printf("%d-->", c);
+		b = matr[b][to].next;
+		c = matr[b][to].num_fr;
+		if (b == fr) { return -1; }
+		if ((matr)[b][to].next != -1) {
+			if ((matr)[(matr)[b][to].next][to].next == b && b != to && (matr)[b][to].next != to) {
+				return -1;
+			}
+		}
+	}
+	printf("%d\n", c);
+}
+
+void DFS_Timing() {
+	Graph* gr;
+	int n = 1,  k, cnt = 1000, i, m, re;
+	clock_t first, last;
+	srand(time(NULL));
+	while (n <= 10) {
+		gr=random( n * 1000);
+		m = 0;
+		first = clock();
+		for (i = 0; i < 1000; ++i) {
+			Find* a = DFS(gr,rand()%5000,rand()%5000);
+			if (a != NULL) { 
+				m++;
+				free_find(a);
+			}
+		}
+		last = clock();
+		printf("%d items was found\n", m);
+		printf("test #%d, number of nodes = %d, time = %d\n",  n, n * cnt, last - first);
+		free_Graph(gr);
+		n++;
+	}
+	return;
+}
+
+
+void BF_Timing() {
+	Graph* gr;
+	int n = 1, k, cnt = 100, i, m, re;
+	clock_t first, last;
+	srand(time(NULL));
+	while (n <= 10) {
+		gr = random(n * 100);
+		m = 0;
+		first = clock();
+		for (i = 0; i < 100; ++i) {
+			Ver* a = BF_Find(gr, rand() % 5000, rand() % 5000);
+			if (a != NULL) {
+				m++;
+			}
+		}
+		last = clock();
+		printf("%d items was found\n", m);
+		printf("test #%d, number of nodes = %d, time = %d\n", n,  n* cnt, last - first);
+		free_Graph(gr);
+		n++;
+	}
+	return;
+}
+
