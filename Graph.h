@@ -53,6 +53,7 @@ void* findmatr(MD** a, int size, int* fr, int* to);
 void* random(int n);
 int prov(MD*** matr, int fr, int to);
 int dop_1(Graph* gr, FILE* output);
+void* load_txt();
 
 
 #endif

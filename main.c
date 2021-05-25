@@ -86,8 +86,10 @@ int main() {
 				break;
 			}
 		}
-		for (int j = 0; j < gr->v_size; j++) { free(k[j]); }
-		free(k);
+		if (k != NULL) {
+			for (int j = 0; j < gr->v_size; j++) { free(k[j]); }
+			free(k);
+		}
 	}
 	if (a == 10) {
 		free_Graph(gr);
@@ -98,6 +100,10 @@ int main() {
 	}
 	if (a == 12) {
 		BF_Timing();
+	}
+	if (a == 13) {
+		free_Graph(gr);
+		gr = load_txt();
 	}
     } while (a != 9);
 	save(gr,fname);

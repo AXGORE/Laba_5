@@ -26,16 +26,16 @@ void Get_int(int* a) {
 }
 
 int dialog(int* x, int* y, int* num) {
-	char* options[] = { "1.Add Ver","2.Add Edge","3.Delete Edge", "4.Delete Ver","5.Find ver","6.Show tree","7.Find min way","8.Find 3 vin ways","9.Exit","10. Create random graph","11. Timing_DFS","12. BF_Timing" };
+	char* options[] = { "1.Add Ver","2.Add Edge","3.Delete Edge", "4.Delete Ver","5.Find ver","6.Show tree","7.Find min way","8.Find 3 vin ways","9.Exit","10.Create random graph","11.Timing_DFS","12.BF_Timing","13.Dop_2" };
 	int flag, vsp, n;
 	printf("Choose one option:\n");
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 13; i++) {
 		printf("%s\n", options[i]);
 	}
 	do {
 		Get_int(&vsp);
-		if (vsp > 12) { printf("%s\n", "Error, try again "); }
-	} while (vsp > 12);
+		if (vsp > 13) { printf("%s\n", "Error, try again "); }
+	} while (vsp > 13);
 	if (vsp == -1) { return 9; }
 	printf("\n");
 	if (vsp == 1) {
@@ -116,9 +116,10 @@ int dialog(int* x, int* y, int* num) {
 	}
 	if (vsp == 11) { return 11; }
 	if (vsp == 12) { return 12; }
+	if (vsp == 13) { return 13; }
 }
 void Error() {
-	printf("\nCan't add vertex with rhis name\n");
+	printf("\nCan't use vertex with this name\n");
 }
 int Get_key(int* a) {
 	int x;

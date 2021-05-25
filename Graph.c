@@ -454,3 +454,64 @@ int dop_1(Graph* gr, FILE* output) {
 	}
 	return 0;
 }
+
+void* load_txt() {
+  Graph* gr = (Graph*)calloc(1, sizeof(Graph));
+  FILE* f;
+  int flag=0;
+  int num, x, y,e=0;
+  f = fopen("OL.cnode.txt","r+b");
+  char* help = (char*)calloc(255,sizeof(char));
+  while (flag == 0) {
+	  for (int i = 0; i < 3; i++) {
+		  e = fscanf(f,"%s",help);
+		  if (e == -1) {
+			  flag = 1;
+			  break;
+		  }
+		  if (i == 0) {
+			  num = atoi(help);
+		  }
+		  else if (i == 1) {
+			  x = atoi(help);
+		  }
+		  else if (i == 2) {
+			  y = atoi(help);
+		  }
+	  }
+	  if (flag == 0) {
+		  Add_Ver(x, y, &gr, num);
+	  }
+  }
+  fclose(f);
+  flag = 0;
+  f = fopen("OL.cedge.txt","r+b");
+  while (flag == 0) {
+	  for (int i = 0; i < 4; i++) {
+		  e = fscanf(f, "%s", help);
+		  if (e == -1) {
+			  flag = 1;
+			  break;
+		  }
+		  if (i == 0) {
+			  continue;
+		  }
+		  else if (i == 1) {
+			  x = atoi(help);
+		  }
+		  else if (i == 2) {
+			  y = atoi(help);
+		  }
+		  else if (i == 3) {
+			  continue;
+		  }
+	  }
+	  if (flag == 0) {
+		  Add_Edge(x,y,&gr);
+		  Add_Edge(y,x, &gr);
+	  }
+  }
+  fclose(f);
+  free(help);
+  return gr;
+}
